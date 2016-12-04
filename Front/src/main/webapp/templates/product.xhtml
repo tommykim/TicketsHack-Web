@@ -1,0 +1,47 @@
+<div class="product same-height" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:h="http://xmlns.jcp.org/jsf/html">
+	<div class="flip-container">
+		<div class="flipper">
+			<div class="front">
+				<a jsf:action="#{mbAccueil.redirectionFicheDescriptive(evenement)}">
+					<f:param name="evenement" value="${evenement.idEvenement}" /> <img
+					src="images/#{evenement.affiche}" alt=""
+					class="img-responsive center-block" />
+				</a>
+			</div>
+			<div class="back">
+				<a jsf:action="#{mbAccueil.redirectionFicheDescriptive(evenement)}">
+					<f:param name="evenement" value="${evenement.idEvenement}" /> <img
+					src="images/#{evenement.affiche}" alt=""
+					class="img-responsive center-block" />
+				</a>
+			</div>
+		</div>
+	</div>
+	<a jsf:action="#{mbAccueil.redirectionFicheDescriptive(evenement)}"
+		class="invisible"> <f:param name="evenement"
+			value="${evenement.idEvenement}" /> <img
+		src="images/#{evenement.affiche}" alt=""
+		class="img-responsive center-block" />
+	</a>
+	<div class="text">
+		<h3>
+			<a jsf:action="#{mbAccueil.redirectionFicheDescriptive(evenement)}">
+				<f:param name="evenement" value="${evenement.idEvenement}" />
+				#{evenement.libelleEvenement}
+			</a>
+		</h3>
+		<br />
+		<h:outputLabel value="A partir du: " />
+		<h:outputLabel value="#{mbAccueil.minDateEvenement(evenement)}">
+			<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+		</h:outputLabel>
+		<br />
+		<h:outputLabel value="A partir de: " />
+		<h:outputText value="#{mbAccueil.minPrixEvenement(evenement)} €" />
+		<br />
+</div>
+</div>

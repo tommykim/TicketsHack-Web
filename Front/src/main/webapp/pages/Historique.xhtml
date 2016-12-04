@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="templateHeaderFooter.xhtml">
+
+	<!-- ===== HEADER ===== -->
+
+	<ui:define name="insert-head">
+		<title>Historique des achats</title>
+		<link rel="stylesheet" href="../style/cssHistorique.css" />
+	</ui:define>
+		
+	<!-- INSERT BODY -->
+	<ui:define name="insert-body">
+	
+	<!-- ==== TRUNK ==== -->
+	<div class="trunk">
+	
+<section style="min-height:500px">
+<h:form>
+	<ui:repeat var="commande" value="#{MBhistorique.getListCommande()}" >
+	    <p:panel id="panel" header=" Reference de votre commande : #{commande.reference}" style="margin-bottom:20px" collapsed="true" toggleable="true">
+	         <center>
+	         	<p:outputLabel value="Date d'achat : #{commande.dateCreation}" />
+	         	<p:spacer width="30" height="10" />
+	         		<p:outputLabel value="--------------------------" />
+	         	<p:spacer width="30" height="10" />
+	         	<p:outputLabel value=" TOTAL des achats : #{MBhistorique.Totaux(commande)} €uros" />
+	         </center>
+		         <ui:repeat var="ligne" value="#{MBhistorique.getListeLigneCommande(commande)}">
+		         	<p:panel>
+			         <br /><br /><p:outputLabel value="Article : #{MBhistorique.getEvenement(MBhistorique.getOccurence(MBhistorique.getTarif(ligne))).libelleEvenement}" /><br />
+			         <p:outputLabel value="Nombre d'unité : #{ligne.quantitie} , #{MBhistorique.getTarif(ligne).libelleTarif}" /><br />
+			         <p:outputLabel id="total" value="Prix Total : #{MBhistorique.Total(MBhistorique.getTarif(ligne).prix,ligne.quantitie)} €uros" /><br />
+	    		 	</p:panel>
+	    		 </ui:repeat>
+		   		<center>
+				<p:commandButton value="Recevoir par E-mail" >
+				<p:confirm header="Facture Envoyée" message="Le detail de votre commande #{commande.reference} sera envoyé à votre adresse mail." />
+				</p:commandButton>
+				</center>
+					<h:form id="formMessage">           
+		    			<p:growl id="message" showDetail="true" />
+		    			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="true" >
+		    			</p:confirmDialog>
+					</h:form>
+	    </p:panel>
+    </ui:repeat>
+</h:form>
+</section>
+
+	</div>
+
+</ui:define>
+</ui:composition>
+</html>

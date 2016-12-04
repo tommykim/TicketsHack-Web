@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="templateHeaderFooter.xhtml">
+
+	<!-- ===== HEADER ===== -->
+
+	<ui:define name="insert-head">
+		<title>Panier</title>
+		<link rel="stylesheet" href="../style/cssPanier.css" />
+	</ui:define>
+		
+	<!-- INSERT BODY -->
+	<ui:define name="insert-body">
+	
+	<!-- ==== TRUNK ==== -->
+	<div class="trunk">
+	
+<section style="min-height:500px">
+<h:form id="formPanel">
+	<ui:repeat var="ligne" value="#{MBpanier.getListeLigneCommande()}" >
+	    <p:panel id="panel" header="#{MBpanier.getEvenement(MBpanier.getOccurence(MBpanier.getTarif(ligne))).libelleEvenement}" style="margin-bottom:20px">
+	         <p:outputLabel value="Quantité : " />
+	         <p:spinner value="#{ligne.quantitie}" min="1" size="2">
+	         	<p:ajax update="total :formTotal:totalTotal" process="@this" />
+           	 </p:spinner>
+	         	<p:spacer width="30" height="10" />
+	         <p:outputLabel value="Date de l'événement : "/>
+	         <p:outputLabel value="#{MBpanier.getOccurence(MBpanier.getTarif(ligne)).date}" >
+	         	<f:convertDateTime type="date" pattern="dd/MM/yyyy 'à' hh'h'mm"/>
+	         </p:outputLabel>
+	         	<p:spacer width="30" height="10" />
+	         <p:outputLabel value="Lieu de l'evenement : #{MBpanier.getOccurence(MBpanier.getTarif(ligne)).lieu}" />
+	         	<p:spacer width="30" height="10" />
+	         <p:outputLabel value="Prix unitaire #{MBpanier.getTarif(ligne).libelleTarif} = #{MBpanier.getTarif(ligne).prix} €uros"/>
+	         	<p:spacer width="30" height="10" />
+	         <p:outputLabel id="total" value="Prix TOTAL : #{MBpanier.Total(MBpanier.getTarif(ligne).prix,ligne.quantitie)} €uros" />
+	         <center><p:commandLink value="Retirer du panier" action="#{MBpanier.Retirer(ligne)}" style="margin-top:15px;color:blue;text-align:right"/></center>
+	    </p:panel>
+    </ui:repeat>
+</h:form>
+<h:form id="formTotal">
+	<p:panel id="panelTotal" header="TOTAL DE LA COMMANDE" style="margin-bottom:20px">
+	    <p:outputLabel id="totalTotal" value="Prix TOTAL : 	#{MBpanier.Totaux()} 	€uros" />
+	    <center><p:outputLabel value="Vous devez être connecté pour passer une commande !" rendered="#{mbConnexion.isConnected()==false}" style="color:red;margin-bottom:20px"/></center>
+	   	<center>
+		<p:commandButton value="PASSER LA COMMANDE" disabled="#{mbConnexion.isConnected()==false or MBpanier.listeLigneCommande.size() eq 0}">
+		<p:confirm header="Confirmation d'achat" message="Merci pour votre confiance, vos billets seront envoyés à votre adresse mail." />
+		</p:commandButton>
+		</center>
+	</p:panel>
+</h:form>
+<h:form id="formMessage">           
+    <p:growl id="message" showDetail="true" />
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="false" >
+        <center><h:commandLink value="Confirmer la commande" action="#{MBpanier.commander()}" /></center>
+    </p:confirmDialog>
+</h:form>
+</section>
+
+	</div>
+
+</ui:define>
+</ui:composition>
+</html>

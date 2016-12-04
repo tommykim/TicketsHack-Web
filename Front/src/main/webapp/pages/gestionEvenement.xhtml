@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templateHeaderFooter.xhtml">
+
+	<!-- INSERT HEAD -->
+	<ui:define name="insert-head">
+		<title>Gestion d'un Evenement</title>
+		<link rel="stylesheet" href="../style/gestionEvenement.css" />
+	</ui:define>
+
+	<!-- INSERT BODY -->
+	<ui:define name="insert-body">
+
+		<!-- ==== TRUNK ==== -->
+		<div class="trunk">
+
+			<div class="titrePage">
+				<h1 style="font-family: 'Trebuchet Ms'">Ajout d'un Evenement</h1>
+			</div>
+			<div class="contenuPage">
+				<div class="sectionImportXml" style="margin-bottom: 30px;">
+					<h:form enctype="multipart/form-data">
+						<div>
+							<input type="file" name="fichierupload" />
+							<h:commandButton action="#{mbAjoutEvenement.uploadXmlFile()}" value="Upload XML" id="btn1" />
+						</div>
+					</h:form>
+					<h:form enctype="multipart/form-data">
+						<div>
+							<input type="file" name="fichierupload" />
+							<h:commandButton action="#{mbAjoutEvenement.uploadImgFile()}" value="Upload IMG" id="btn2" />
+						</div>
+					</h:form>
+				</div>
+				<h:form id="formulaireAjoutEvenement">
+					<div class="contenuFormulaire ui-grid-row">
+						<div class="colonneGauche ui-grid-col-4">
+								<h:outputText value="Evenement" class="sousTitre" style="font-family:'Trebuchet Ms'; font-size: 20px; text-align: center; margin-bottom:5px;"/>
+								<h:panelGrid columns="2" cellpadding="5" class="formAjoutEvenement">
+
+									<h:outputLabel value="Categorie: " />
+									<p:inputText value="#{mbAjoutEvenement.evenement.categorie.libelleCategorie}" required="true" />
+
+									<h:outputLabel value="Libelle: " />
+									<p:inputText value="#{mbAjoutEvenement.evenement.libelleEvenement}" required="true" />
+
+									<h:outputLabel value="Descriptif: " />
+									<p:inputTextarea value="#{mbAjoutEvenement.evenement.descriptif}" />
+
+									<h:outputLabel value="Affiche: " />
+									<p:inputText value="#{mbAjoutEvenement.evenement.affiche}" />
+
+								</h:panelGrid>
+						</div>
+						<div class="colonneDroite ui-grid-col-8">
+							<ui:repeat var="occurence"	value="#{mbAjoutEvenement.evenement.occurences}">
+							
+								<div style="font-family: 'Trebuchet Ms'; font-size: 20px; margin-bottom: 20px;">Occurences et Tarifs</div>
+								<div class="inputsOccurence ui-grid-col-4">
+									<h:panelGrid columns="2" cellpadding="5">
+										<h:outputLabel value="Date: " />
+										<p:inputText value="#{occurence.date}">
+											<f:convertDateTime pattern="yyyy/MM/dd/hh/mm" />
+										</p:inputText>
+
+										<h:outputLabel value="Lieu: " />
+										<p:inputText value="#{occurence.lieu}" />
+
+										<h:outputLabel value="Nombre Places: " />
+										<p:inputText value="#{occurence.nombrePlaces}" />
+									</h:panelGrid>
+								</div>
+								<div class="ui-grid-col-4">&#160;</div>
+								<div class="inputsTarifs ui-grid-col-4">
+									<ui:repeat var="tarif"	value="#{occurence.tarifs}">
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputLabel value="Libelle: " />
+											<p:inputText value="#{tarif.libelleTarif}" />
+
+											<h:outputLabel value="Prix: " />
+											<p:inputText value="#{tarif.prix}" />
+										</h:panelGrid>
+									</ui:repeat>
+								</div>
+								
+							</ui:repeat>
+						</div>
+					</div>
+					<div class="boutonValider">
+						<p:commandButton value="Enregistrer" >
+							<p:confirm header="Evenement Ajouté" message="L'évènement '#{mbAjoutEvenement.evenement.libelleEvenement}' a bien été ajouté." />
+						</p:commandButton>
+					</div>
+				</h:form>
+				<h:form id="formMessage">           
+    				<p:growl id="message" showDetail="true" />
+    				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="true" >
+        				<center><h:commandLink value="Continuer" action="#{mbAjoutEvenement.ajouterEvenement()}"/></center>
+    				</p:confirmDialog>
+				</h:form>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>
+</html>

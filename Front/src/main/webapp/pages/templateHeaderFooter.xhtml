@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta name="language" content="fr" />
+
+	<link rel="stylesheet" href="../style/templateHeaderFooter.css" />
+	
+	<!-- Insert du Head -->
+	<ui:insert name="insert-head">
+    </ui:insert>
+</h:head>
+<h:body>
+	<!-- ===== HEADER ===== -->
+	<header>
+
+		<nav class="menuPrincipal ui-grid-row">
+			<div class="celluleAccueil ui-grid-col-1" style="margin-left:50px">
+			<h:graphicImage value="/images/tictac.ico" width="100px"/>
+			<a href="accueil.jsf">Ticket's Hack</a>
+			</div>
+			<div class="cellulesCategorie ui-grid-col-10" >
+				<h:form>
+					<div class="ui-grid-col-2" style="margin-top:60px" >
+						<h:commandLink value="Cinéma" action="#{mbAccueil.redirectionCategorieById(1)}" />
+					</div>
+					<div class="ui-grid-col-2" style="margin-top:60px">
+						<h:commandLink value="Concert" action="#{mbAccueil.redirectionCategorieById(2)}" />
+					</div>
+					<div class="ui-grid-col-2" style="margin-top:60px">
+						<h:commandLink value="Musée" action="#{mbAccueil.redirectionCategorieById(3)}" />
+					</div>
+					<div class="ui-grid-col-2" style="margin-top:60px">
+						<h:commandLink value="Parc" action="#{mbAccueil.redirectionCategorieById(4)}" />
+					</div>
+					<div class="ui-grid-col-2" style="margin-top:60px">
+						<h:commandLink value="Spectacle" action="#{mbAccueil.redirectionCategorieById(5)}" />
+					</div>
+					<div class="ui-grid-col-2" style="margin-top:60px">
+						<h:commandLink value="Sport" action="#{mbAccueil.redirectionCategorieById(6)}" />
+					</div>
+				</h:form>
+			</div>
+		</nav>
+
+		<h:panelGroup id="menuConnexion" class="menuConnexion ui-grid-row" layout="block">
+			<h:form rendered="#{!mbConnexion.connected}">
+				<div class="inputConnexion ui-grid-col-9">
+					<div class="ui-grid-col-1">&#160;</div>
+					<div class="ui-grid-col-3" style="margin-top:5px">
+						<h:outputLabel style="font-size:20px;" value="Mail:" />
+						<h:inputText value="#{mbConnexion.utilisateur.mail}" size="15" />
+					</div>
+					<div class="ui-grid-col-3" style="margin-top:5px">
+						<h:outputLabel style="font-size:20px;">Mot de Passe: </h:outputLabel>
+						<h:inputSecret value="#{mbConnexion.utilisateur.mdp}" size="15" />
+					</div>
+					<div class="ui-grid-col-4">
+						<p:commandButton style="margin-right:10px" action="#{mbConnexion.authentification()}"
+							value="Connexion" update="menuConnexion" />
+						<p:commandButton style="margin-right:10px" action="#{mbConnexion.MonCompte()}"
+							value="Pas encore inscrit ?" update="menuConnexion" />
+					</div>
+				</div>
+			</h:form>
+			<h:form rendered="#{mbConnexion.connected}">
+				<div class="inputDeconnexion ui-grid-col-9">
+					<h:panelGroup class="ui-grid-col-3" style="margin-top:5px" rendered="#{!mbConnexion.fournisseur}">
+						<h:outputLabel value="#{mbConnexion.messageBonjour}" />
+					</h:panelGroup>
+						<p:commandButton style="margin-right:10px" action="#{mbConnexion.GestionEvenement()}"
+							value="Ajouter un Evenement" update="menuConnexion" rendered="#{mbConnexion.fournisseur}"/>
+						<p:commandButton style="margin-right:10px" action="#{mbConnexion.MonCompte()}"
+							value="Modifier mon compte" update="menuConnexion" />
+						<p:commandButton style="margin-right:10px" action="#{mbConnexion.Historique()}"
+							value="Historique des commandes" update="menuConnexion" />
+						<p:commandButton style="margin-right:10px" action="#{mbConnexion.Agenda()}"
+							value="Mon agenda" update="menuConnexion" />
+						<p:commandButton style="margin-right:10px" action="#{mbConnexion.deconnexion()}"
+							value="Déconnexion" update="menuConnexion" />
+				</div>
+			</h:form>
+		<h:form id="formPan">
+			<div class="infoPanier ui-grid-col-3">
+				<div class="ui-grid">
+					<div class="ui-grid-col-4" style="margin-top:5px">
+						<h:outputLabel value="#{MBpanier.listeLigneCommande.size()}" style="font-size:20px;"/>
+					</div>
+					<div class="ui-grid-col-8" style="margin-top:5px">
+						<h:commandLink value="Articles dans votre Panier" action="#{mbAccueil.redirectionPanier()}" style="font-size:20px;" >
+						</h:commandLink>
+						
+					</div>
+				</div>
+			</div>
+		</h:form>
+		</h:panelGroup>
+	</header>
+
+	<!-- Insert du Body -->
+	<ui:insert name="insert-body">
+	<!-- Trunk Alternatif -->
+	<div class="trunk" style="text-align: center; background-color: salmon">
+		<br/>
+		<br/>
+		Ceci est le Trunk alternatif, il y insert du contenu si le Template est lancé seul.
+		<br/>
+		<br/>
+	</div>
+	</ui:insert>
+	
+	<!-- ===== FOOTER ===== -->
+	<footer>
+		<nav class="menuFooter ui-grid-row">
+			<div class="ui-grid-col-1" />
+			<div class="ui-grid-col-10">
+				<div class="ui-grid-col-4">
+					<h3>Ticket's Hack</h3>
+					<ul>
+						<li><a href="#">Recrutement</a></li>
+						<li><a href="#">Contactez-nous</a></li>
+						<li><a href="#">Qui sommes nous?</a></li>
+					</ul>
+				</div>
+				<div class="ui-grid-col-4">
+					<h3>Services</h3>
+					<ul>
+						<li><a href="#">Espace Pro</a></li>
+						<li><a href="#">Newsletters</a></li>
+						<li><a href="#">Alertes emails</a></li>
+						<li><a href="#">Revue de Presse</a></li>
+						<li><a href="#">Reporter une Commande</a></li>
+					</ul>
+				</div>
+				<div class="ui-grid-col-4">
+					<h3>A Propos</h3>
+					<ul>
+						<li><a href="#">Cookies</a></li>
+						<li><a href="#">Plan du Site</a></li>
+						<li><a href="#">Mentions Légales</a></li>
+						<li><a href="#">Questions Fréquentes</a></li>
+						<li><a href="#">Conditions Générales</a></li>
+						<li><a href="#"></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="ui-grid-col-1" />
+		</nav>
+	</footer>
+
+</h:body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templateHeaderFooter.xhtml">
+
+	<!-- INSERT HEAD -->
+	<ui:define name="insert-head">
+		<title>Détail de l'événement</title>
+		<link rel="stylesheet" href="../style/cssFiche.css" />
+	</ui:define>
+
+	<!-- INSERT BODY -->
+	<ui:define name="insert-body">
+
+		<!-- ==== TRUNK ==== -->
+		<div class="trunk">
+
+			<div class="ui-grid-row">
+
+				<h:form>
+					<div class="ui-grid-col-3">
+						<p:graphicImage value="../images/#{mbFiche.evenement.affiche}" alt="../images/affiche_default.png" class="affiche" />
+					</div>
+
+					<div class="ui-grid-col-4 description">
+						<h2>#{mbFiche.evenement.libelleEvenement}</h2>
+						<h4>
+							<h:outputText value="Du #{mbFiche.dateDebut} au #{mbFiche.dateFin}"	rendered="#{mbFiche.multipleOccurence}" />
+						</h4>
+						<h:outputText value="#{mbFiche.evenement.descriptif}" />
+					</div>
+				</h:form>
+
+
+				<div class="ui-grid-col-5 ">
+					<div class="selectionTarifs">
+						<h:form id="toto">
+							<h2>Tarifs disponibles</h2>
+							<h:panelGrid columns="2" style="margin-bottom:10px"
+								cellpadding="5">
+								<p:outputLabel value="Département(s) disponible(s): " />
+								<p:selectOneMenu id="dep" value="#{mbFiche.idDep}"
+									style="width:200px">
+									<f:selectItems value="#{mbFiche.listeDepartements}" var="d"	itemLabel="#{d.libelleDep}" itemValue="#{d.idDep}">
+									</f:selectItems>
+									<p:ajax event="change" listener="#{mbFiche.chargerOccurences(mbFiche.idDep)}" update="dep occurences" />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="Date, lieu, horaire:" />
+								<p:selectOneMenu id="occurences" value="#{mbFiche.idOccurence}"	immediate="true" style="width:200px">
+									<f:selectItems value="#{mbFiche.listeOccurence}" var="o" itemLabel="#{o.date.toLocaleString()} #{o.lieu}"
+										itemValue="#{o.idOccurence}" />
+									<p:ajax event="change" update="toto" immediate="true" process="@this" listener="#{mbFiche.chargerTarifs}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+
+							<div class="grilleTarif">
+								<div style="height: 30px">
+									<h4>
+										<h:outputText value="Dépêchez-vous, il reste #{mbFiche.placesRestantes} place(s)."
+											rendered="#{mbFiche.placesRestantes &lt; 50 and mbFiche.placesRestantes &gt; 0 }" />
+										<h:outputText value="Il ne reste pas de places disponibles pour cette date."
+											rendered="#{mbFiche.placesRestantes &lt; 0 or mbFiche.placesRestantes eq 0 }"
+											style="color:red" />
+									</h4>
+								</div>
+								<ui:repeat var="ligne" value="#{mbFiche.lc}">
+									<h:panelGrid columns="2" cellpadding="5" styleClass="ui-grid" style="float:right;">
+										<h:outputLabel value="#{ligne.tarif.libelleTarif} - #{ligne.tarif.prix} euros" />
+										<p:spinner value="#{ligne.quantitie}" min="0" max="20" size="4" id="tarifsChoix">
+											<p:ajax event="change" update="toto" />
+										</p:spinner>
+									</h:panelGrid>
+								</ui:repeat>
+							</div>
+							<p:commandButton value="Ajouter au panier" disabled="#{mbFiche.placesRestantes &lt; 0 or mbFiche.placesRestantes eq 0 }">
+								<p:confirm header="Confirmation d'ajout" message="Les articles ont bien été ajoutés dans votre panier." />
+							</p:commandButton>
+						</h:form>
+						<h:form id="formMessage">           
+    						<p:growl id="message" showDetail="true" />
+    						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="true" >
+        						<center><h:commandLink value="Continuer" action="#{mbFiche.ajouterAuPanier()}"/></center>
+    						</p:confirmDialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

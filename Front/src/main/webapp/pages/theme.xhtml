@@ -1,0 +1,170 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	template="../templates/commons.xhtml">
+	<link href="css/datepicker.css" rel="stylesheet" id="theme-stylesheet" />
+
+<f:metadata>
+<f:viewAction action="#{mbRecherche.init()}"></f:viewAction>
+</f:metadata>
+	<ui:define name="body">
+
+		<div class="container">
+
+			<div class="col-md-12">
+				<h:form>
+					<ul class="breadcrumb">
+						<li><a href="pages/index.jsf">Accueil</a></li>
+						<li><a href="pages/categorie.jsf">#{mbRecherche.categorie.libelleCategorie}</a></li>
+						<li>#{mbRecherche.theme.libelleTheme}</li>
+					</ul>
+				</h:form>
+			</div>
+			<!-- fin du div col-md-12 -->
+			<div class="col-md-12">
+				<!-- ***  FILTERS RECHERCHE LEFT*** -->
+
+				<div class="col-md-3">
+					<h:form id="formulaire">
+						<h2>Recherche avancée</h2>
+						<div class="row">
+							<h3>Localisation</h3>
+							<h:selectOneMenu id="comboBosDepartement"
+								value="#{mbRecherche.idDepartement}" filter="true"
+								filterMatchMode="startsWith" class="form-control">
+								<f:selectItem itemLabel="Département" itemValue="" />
+								<f:selectItems var="departement"
+									value="#{mbRecherche.listeDepartements}"
+									itemLabel="#{departement.libelleDep}"
+									itemValue="#{departement.idDep}" />
+							</h:selectOneMenu>
+						</div>
+						<!-- fin div locatlisation row -->
+						<div class="row">
+							<div class="form-group">
+								<h3>A partir du</h3>
+
+
+								<div class='input-group date' id='datePickerDateDebut'>
+									<h:inputText value="#{mbRecherche.dateDebut}"
+										styleClass="form-control" a:placeholder="Du"
+										a:required="required">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:inputText>
+									<span class="input-group-addon"> <span
+										class="fa fa-calendar"></span>
+									</span>
+								</div>
+								<h3>Jusqu'au</h3>
+								<div class='input-group date' id='datePickerDateFin'>
+									<h:inputText value="#{mbRecherche.dateFin}"
+										styleClass="form-control" a:placeholder="Jusqu'au"
+										a:required="required">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:inputText>
+									<span class="input-group-addon"> <span
+										class="fa fa-calendar"></span>
+									</span>
+								</div>
+
+							</div>
+						</div>
+
+						<!-- fin div row date-->
+						<div class="row">
+							<h3>Prix</h3>
+							<div class="row">
+								<div class="col-sm-6">
+									Du
+									<h:inputText id="txtPrixBas" value="#{mbRecherche.prixBas}"
+										class="form-control" />
+								</div>
+								<div class="col-sm-6">
+									Au
+									<h:inputText id="txtPrixHaut" value="#{mbRecherche.prixHaut}"
+										class="form-control"/>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<h:commandButton type="submit" value="Rechercher" action="null"
+								update="themes" class="btn btn-primary" />
+						</div>
+					</h:form>
+				</div>
+				<!-- ***  ZONE AFFICHAGE RIGHT*** -->
+				<div class="col-md-9">
+					<!-- ***  ZONE TRI PAR CRITERES *** -->
+					<div class="box">
+						<h:form>
+							<div class="col-sm-12">
+								<div class="col-sm-3">
+									<h:commandLink action="#{mbRecherche.affecterCritereTri(2)}"
+										value="Nouveauté" update="theme" />
+								</div>
+								<div class="col-sm-3">
+									<h:commandLink action="#{mbRecherche.affecterCritereTri(3)}"
+										value="Popularité" update="theme" />
+								</div>
+								<div class="col-sm-3">
+									<h:commandLink action="#{mbRecherche.affecterCritereTri(4)}"
+										value="Prix" update="theme" />
+								</div>
+								<div class="col-sm-3">
+									<h:commandLink action="#{mbRecherche.affecterCritereTri(1)}"
+										value="Date" update="theme" />
+								</div>
+							</div>
+						</h:form>
+					</div>
+					<!-- fin div box tri critere -->
+					<!-- ***  ZONE AFFICHER LISTE EVENEMENTS *** -->
+					<div class="col-sm-12" id="themes">
+						<ul class="list-unstyled">
+							<h:form>
+								<ui:repeat var="evenement"
+									value="#{mbTheme.evenementsByAllCriteresOrderedByCritere}">
+									<li>
+										<div class="col-sm-4">
+											<div class="product">
+												<a jsf:action="#{mbTheme.redirectionFiche(evenement)}">
+													<f:param name="evenement" value="${evenement.idEvenement}" />
+													<img src="images/#{evenement.affiche}" alt=""
+													class="img-responsive center-block" />
+												</a>
+												<div class="text">
+													<h3>
+														<h:commandLink
+															action="#{mbTheme.redirectionFiche(evenement)}"
+															value="#{evenement.libelleEvenement}" />
+													</h3>
+													<br />
+													<h:outputLabel value="A partir du: " />
+													<h:outputLabel
+														value="#{mbAccueil.minDateEvenement(evenement)}">
+														<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+													</h:outputLabel>
+													<br />
+													<h:outputLabel value="A partir de: " />
+													<h:outputText
+														value="#{mbAccueil.minPrixEvenement(evenement)} €" />
+													<br />
+												</div>
+											</div>
+										</div>
+									</li>
+								</ui:repeat>
+							</h:form>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- /.col-md-12 -->
+		</div>
+	</ui:define>
+
+</ui:composition>

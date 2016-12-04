@@ -1,0 +1,93 @@
+@CHARSET "UTF-8";
+
+/* === TRUNK === */
+.trunk {
+	height: auto;
+	margin: 20px 0px;
+}
+.trunk .menuGauche {
+	box-sizing: border-box;
+	width: 15%;	
+	float: left;
+}
+.trunk .menuTheme, .trunk .menuAffinageRecherche {
+	color: white;
+	background-color: #5A5E6B;
+	padding: 15px 30px 30px;
+	border-style: ridge;
+    border-width: 2px;
+}
+.trunk .menuTheme ul, .trunk .menuAffinageRecherche ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.trunk .menuTheme ul li, .trunk .menuAffinageRecherche ul li {
+	margin-top: 8px;
+}
+.trunk .menuTheme a, .trunk .menuAffinageRecherche a {
+	text-decoration: none;
+	color: inherit;
+}
+.trunk .menuTheme a:hover, .trunk .menuAffinageRecherche a:hover {
+	color: #FF5555;
+}
+.trunk .menuAffinageRecherche {
+	margin-top: 20px;
+}
+
+.trunk .titreCategorie {
+	text-align: center;
+	font-weight: bold;
+}
+.trunk .categories {
+	width: 83%;
+	float: right;
+}
+.trunk .barreFiltre {
+	background-color: #778899;
+	text-align: center;
+	font-weight: bold;
+	border-style: ridge;
+    border-width: 2px;
+}
+.trunk .barreFiltre a {
+	text-decoration: none;
+	color: inherit;
+}
+.trunk .barreFiltre a:hover {
+	color: #FF6666;
+}
+.trunk .barreFiltre .enTeteFiltre {
+	color: white;
+	background-color: #5A5E6B;
+	border-style: ridge;
+    border-width: 2px;
+}
+.trunk .barreFiltre .enTeteFiltre, .trunk .barreFiltre .contenuFiltre {
+	padding: 10px;
+}
+.trunk section {
+	margin: 0px 0px 0px;
+	padding: 0px 0px;
+	position: relative;
+}
+
+.trunk section .afficheEvenement {
+	max-width: 400px;
+	max-height: 240px;
+}
+
+.trunk .encartTitre {
+	text-align: center;
+	border: 1px solid black;
+	margin-bottom: 25px;
+	padding: 10px 0px;
+	background-color: #778899;
+}
+.trunk .titreCategorie {
+	font-size: 26px;
+}
+.trunk .titreTheme {
+	font-size: 22px;
+}

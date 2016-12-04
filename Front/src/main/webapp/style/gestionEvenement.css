@@ -1,0 +1,29 @@
+@CHARSET "UTF-8";
+
+/* === TRUNK === */
+.trunk {
+	height: auto;
+	margin: auto;
+	padding: 20px 100px;
+}
+.trunk .titrePage {
+	text-align: center;
+}
+.trunk .colonneGauche {
+}
+.trunk .coloneDroite {
+}
+.trunk .boutonValider {
+	width: 100px;
+	margin: auto;
+}
+.trunk .formAjoutEvenement {
+	border: 3px solid #AAAAAA;
+}
+.trunk .inputsOccurence {
+	border: 3px solid #AAAAAA;
+	margin-right: 50px;
+}
+.trunk .inputsTarifs {
+	border: 3px solid #AAAAAA;
+}

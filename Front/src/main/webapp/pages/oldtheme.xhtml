@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="templateHeaderFooter.xhtml">
+
+	<!-- INSERT HEAD -->
+	<ui:define name="insert-head">
+		<title>Thème</title>
+		<link rel="stylesheet" href="../style/categorie.css" />
+	</ui:define>
+
+	<!-- INSERT BODY -->
+	<ui:define name="insert-body">
+
+		<!-- ==== TRUNK ==== -->
+		<div class="trunk">
+			<div class="menuGauche">
+				<div class="menuTheme">
+					<h2>Thème</h2>
+					<ul>
+						<h:form>
+							<ui:repeat var="theme" value="#{mbRecherche.themesByCategorie}">
+								<li><h:commandLink value="#{theme.libelleTheme}"
+										action="#{mbCategorie.redirectionTheme(theme)}" /></li>
+							</ui:repeat>
+						</h:form>
+					</ul>
+				</div>
+				<div class="menuAffinageRecherche">
+					<h:form id="formulaire">
+						<h3>Affiner la Recherche</h3>
+						<ul>
+							<li>
+								<h3>Localisation</h3> <p:selectOneMenu id="comboBosDepartement"
+									value="#{mbRecherche.idDepartement}" filter="true"
+									filterMatchMode="startsWith">
+									<f:selectItem itemLabel="Département" itemValue="" />
+									<f:selectItems var="departement"
+										value="#{mbRecherche.listeDepartements}"
+										itemLabel="#{departement.libelleDep}"
+										itemValue="#{departement.idDep}" />
+								</p:selectOneMenu>
+							</li>
+							<li>
+								<h3>A partir de</h3> <p:calendar id="datePickerDateDebut"
+									value="#{mbRecherche.dateDebut}"
+									mindate="#{mbCategorie.minDateDebut}" locale="fr">
+								</p:calendar>
+							</li>
+							<li>
+								<h3>Jusqu'au</h3> <p:calendar id="datePickerDateFin"
+									value="#{mbRecherche.dateFin}"
+									mindate="#{mbCategorie.minDateDebut}" locale="fr" />
+							</li>
+
+							<script type="text/javascript">
+					PrimeFaces.locales['fr'] = {
+						closeText : 'Fermer',
+						prevText : 'Précédent',
+						nextText : 'Suivant',
+						monthNames : [ 'Janvier', 'Février', 'Mars', 'Avril',
+								'Mai', 'Juin', 'Juillet', 'Août', 'Septembre',
+								'Octobre', 'Novembre', 'Décembre' ],
+						monthNamesShort : [ 'Jan', 'Fév', 'Mar', 'Avr', 'Mai',
+								'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc' ],
+						dayNames : [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi',
+								'Jeudi', 'Vendredi', 'Samedi' ],
+						dayNamesShort : [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu',
+								'Ven', 'Sam' ],
+						dayNamesMin : [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+						weekHeader : 'Semaine',
+						firstDay : 1,
+						isRTL : false,
+						showMonthAfterYear : false,
+						yearSuffix : '',
+						timeOnlyTitle : 'Choisir l\'heure',
+						timeText : 'Heure',
+						hourText : 'Heures',
+						minuteText : 'Minutes',
+						secondText : 'Secondes',
+						currentText : 'Maintenant',
+						ampm : false,
+						month : 'Mois',
+						week : 'Semaine',
+						day : 'Jour',
+						allDayText : 'Toute la journée'
+					};
+				</script>
+
+							<li>
+								<h3>Prix</h3> <h:panelGrid columns="1"
+									style="margin-bottom: 10px">
+									<h:outputText id="displayRange"
+										value="Entre #{mbRecherche.prixBas} et #{mbRecherche.prixHaut}" />
+									<p:slider for="txtPrixBas,txtPrixHaut" display="displayRange"
+										range="true" displayTemplate="Entre {min} et {max}"
+										minValue="0" maxValue="500"
+										style="width:150px;margin-bottom:20px;" />
+								</h:panelGrid> <h:inputHidden id="txtPrixBas" value="#{mbRecherche.prixBas}" />
+								<h:inputHidden id="txtPrixHaut" value="#{mbRecherche.prixHaut}" />
+							</li>
+						</ul>
+						<p:commandButton type="submit" value="Rechercher" action="null"
+							update="categories" />
+					</h:form>
+				</div>
+			</div>
+			<h:panelGroup id="categories" class="categories" layout="block">
+				<section>
+					<div class="encartTitre">
+						<div class="titreCategorie">
+							<span>#{mbRecherche.categorie.libelleCategorie}</span>
+						</div>
+						<div class="titreTheme">
+							<span>- #{mbRecherche.theme.libelleTheme} -</span>
+						</div>
+					</div>
+					<div class="barreFiltre ui-grid-row">
+
+						<div class="enTeteFiltre ui-grid-col-1">Tri</div>
+						<div class="contenuFiltre ui-grid-col-11">
+							<h:form>
+								<div class="ui-grid-col-2">
+									<p:commandLink action="#{mbRecherche.affecterCritereTri(2)}"
+										value="Nouveauté" update="categories" />
+								</div>
+								<div class="ui-grid-col-2">
+									<p:commandLink action="#{mbRecherche.affecterCritereTri(3)}"
+										value="Popularité" update="categories" />
+								</div>
+								<div class="ui-grid-col-2">
+									<p:commandLink action="#{mbRecherche.affecterCritereTri(4)}"
+										value="Prix" update="categories" />
+								</div>
+								<div class="ui-grid-col-2">
+									<p:commandLink action="#{mbRecherche.affecterCritereTri(1)}"
+										value="Date" update="categories" />
+								</div>
+							</h:form>
+						</div>
+
+					</div>
+					<!-- ===== Liste des Evènements ===== -->
+					<h:form>
+						<ui:repeat var="evenement"
+							value="#{mbTheme.getEvenementsByAllCriteresOrderedByCritere()}">
+							<p:panel>
+								<h:panelGrid columns="2" style="width:100%"
+									columnClasses="logo,detail">
+									<h:commandLink action="#{mbTheme.redirectionFiche(evenement)}">
+										<p:graphicImage class="afficheEvenement"
+											value="../images/#{evenement.affiche}" alt="Affiche"
+											style="overflow:hidden" />
+									</h:commandLink>
+									<h:panelGroup layout="block" style="padding-left:50px;">
+										<h1>
+											<h:outputText value="#{evenement.libelleEvenement}"
+												style="font-weight: bold" />
+										</h1>
+										<h:outputText value="#{evenement.descriptif}"
+											style="font-weight: bold" />
+										<br />
+										<h:outputText value="A partir du: " />
+										<p:outputLabel value="#{mbTheme.minDateEvenement(evenement)}">
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+										</p:outputLabel>
+										<br />
+										<h:outputText
+											value="A partir de: #{mbTheme.minPrixEvenement(evenement)} €" />
+
+									</h:panelGroup>
+								</h:panelGrid>
+							</p:panel>
+						</ui:repeat>
+					</h:form>
+				</section>
+			</h:panelGroup>
+		</div>
+
+	</ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,36 @@
+@CHARSET "UTF-8";
+
+.headerInscription {
+	padding-top: 30px;
+	margin-bottom: 20px;
+}
+
+.headerInscription h1 {
+	text-align: center;
+}
+h3 {
+	text-align: center;
+}
+.couleurDeFond {
+	background-color:#CBCFC8;
+}
+
+.formInscription {
+	padding-left: 50px;
+}
+.themesSelection{
+	height: auto;
+	padding-left: 50px;
+}
+.monospacePolice{
+	font-family: monospace;
+}
+.boutonEspace{
+	margin: 25px;
+}
+.confirmation{
+	font-size: x-large;
+	font-weight: bold;
+	color: green; 
+	text-align: center;
+}

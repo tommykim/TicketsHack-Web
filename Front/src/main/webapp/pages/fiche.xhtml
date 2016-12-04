@@ -1,0 +1,150 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	template="../templates/commons.xhtml">
+	<!--     <ui:param name="feed" value="#{mBeanProduct.threeSimilarProductsList}" /> -->
+	
+	<ui:define name="body">
+		<div class="container">
+			<!--             <ui:include src="/WEB-INF/templates/breadcrumb.xhtml"></ui:include> -->
+			<div class="col-md-12">
+			<h:form>
+				<div class="row" id="productMain">
+					<div class="col-sm-12">
+						<div class="box">
+							<div class="row">
+								<div class="col-sm-4">
+									<a> <img src="images/#{mbFiche.evenement.affiche}" alt=""
+										class="img-responsive center-block" />
+									</a>
+								</div>
+								<!-- / fin div img col-sm-4 -->
+								<div class="col-sm-8">
+									<div class="row">
+										<h2>#{mbFiche.evenement.libelleEvenement}</h2>
+										<h4>
+											<h:outputText
+												value="Du #{mbFiche.dateDebut} au #{mbFiche.dateFin}" />
+										</h4>
+										<h:outputText value="#{mbFiche.evenement.descriptif}" />
+									</div>
+									<br />
+									<!-- fin row1.1 -->
+
+									<br />
+									<div class="row">
+
+										<h:panelGroup id="toto">
+
+											<h3>Tarifs disponibles</h3>
+											<h4>Il reste <label id="nbPlacesWS" style="color: red;"></label> billets chez notre partenaire</h4>
+											<h:panelGrid columns="2">
+												<h:outputLabel value="Département(s) disponible(s): " />
+												<h:selectOneMenu value="#{mbFiche.idDep}"
+													class="form-control">
+													<f:selectItems value="#{mbFiche.listeDepartements}" var="d"
+														itemLabel="#{d.libelleDep}" itemValue="#{d.idDep}">
+													</f:selectItems>
+													<f:ajax event="change"
+														listener="#{mbFiche.chargerOccurences(mbFiche.idDep)}"
+														update="occurences" />
+												</h:selectOneMenu>
+												<h:outputLabel value="Date, lieu, horaire:" />
+												<h:selectOneMenu id="occurences"
+													value="#{mbFiche.idOccurence}"
+													class="form-control">
+													<f:selectItems value="#{mbFiche.listeOccurence}" var="o"
+														itemLabel="#{o.date.toLocaleString()} #{o.lieu}"
+														itemValue="#{o.idOccurence}" />
+													<f:ajax event="change" render="toto"
+														 listener="#{mbFiche.chargerTarifs}" />
+												</h:selectOneMenu>
+											</h:panelGrid>
+<!-- 											<div class="row"> -->
+<!-- 												<h4> -->
+<!-- 													<h:outputText -->
+<!-- 														value="Dépêchez-vous, il reste #{mbFiche.placesRestantes} place(s)." -->
+<!-- 														rendered="#{mbFiche.peuDePlace()}" /> -->
+<!-- 													<h:outputText -->
+<!-- 														value="Il ne reste pas de places disponibles pour cette date." -->
+<!-- 														rendered="#{mbFiche.pasDePlace()}" -->
+<!-- 														style="color:red" /> -->
+<!-- 												</h4> -->
+<!-- 											</div> -->
+
+											<ui:repeat var="ligne" value="#{mbFiche.lc}">
+												<h:panelGrid columns="2">
+													<h:outputLabel
+														value="#{ligne.tarif.libelleTarif} - #{ligne.tarif.prix} euros:" />
+													<input jsf:id="tarifsChoix" type="number"
+														jsf:value="#{ligne.quantitie}" class="form-control">
+														<f:ajax event="change" update="toto" />
+													</input>
+												</h:panelGrid>
+											</ui:repeat>
+											<br />
+
+											<h:commandButton action="#{mbFiche.ajouterAuPanier()}"
+												value="Ajouter au panier" class="btn btn-primary"
+												id="buttonAjout" disabled="#{mbFiche.pasDePlace()}" />
+
+										</h:panelGroup>
+										
+									</div>
+									<!-- 	fin row 1.2 -->
+								</div>
+								<!-- / fin div description col-sm-8 -->
+							</div>
+							<!-- fin row 1 globale -->
+						</div>
+						<!-- box -->
+					</div>
+					<!-- "col-sm-12 -->
+				</div>
+				<!-- "row" id="productMain -->
+					<div id="hot">
+			<div class="box">
+				<div class="container">
+					<div class="col-md-12">
+						<h2>Ces produits pourraient vous intéresser ......</h2>
+					</div>
+				</div>
+			</div>
+			<!-- /.div box -->
+			<div class="container">
+							
+								<div class="product-slider">
+									<ui:repeat var="evenement"
+										value="#{mbFiche.chargerRecommandantions(mbFiche.evenement.idEvenement)}">
+										<div class="item">
+											<ui:include src="../templates/product.xhtml" />
+										</div>
+									</ui:repeat>
+								</div>
+							
+						</div>
+			<!-- /.div container -->
+		</div>
+		<!-- /.div hot -->
+		</h:form>
+			</div>
+			<!-- /.col-md-12 -->
+		</div>
+		<!-- /.container -->
+		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "http://localhost:8080/serviceFournisseur/services/rest/reservation/nbrPlaceDispo/2"
+    }).then(function(data) {
+    	$("#nbPlacesWS").html(JSON.stringify(data));
+    	
+    });
+});
+</script>
+	</ui:define>
+
+</ui:composition>

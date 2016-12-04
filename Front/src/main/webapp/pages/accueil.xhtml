@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="templateHeaderFooter.xhtml">
+
+	<!-- INSERT HEAD -->
+	<ui:define name="insert-head">
+		<title>Accueil</title>
+		<link rel="stylesheet" href="../style/accueil.css" />
+	</ui:define>
+
+	<!-- INSERT BODY -->
+	<ui:define name="insert-body">
+
+		<!-- ==== TRUNK ==== -->
+		<div class="trunk">
+			<!-- ===== CAROUSEL ===== -->
+			<p:carousel numVisible="1" style="margin-bottom:0;" responsive="true"
+				autoPlayInterval="6000">
+				<p:tab title="Philarmonie de Paris">
+					<center>
+						<h:graphicImage value="../images/concert-philarmonie-paris.jpg" />
+					</center>
+				</p:tab>
+				<p:tab title="Muse à la Tour Eiffel">
+					<center>
+						<p:graphicImage value="../images/concert-muse-tour-eiffel.jpg" />
+					</center>
+				</p:tab>
+				<p:tab title="Christope en Concert">
+					<center>
+						<p:graphicImage value="../images/concert-christophe.jpg" />
+					</center>
+				</p:tab>
+			</p:carousel>
+
+			<!-- ===== CATEGORIES ===== -->
+			<ui:repeat var="categorie" value="#{mbAccueil.getAllCategorie()}">
+				<section class="categorie #{categorie.libelleCategorie}">
+					<div class="carouselCategorie">
+						<!-- =====  CAROUSEL PAR CATEGORIE ===== -->
+						<p:carousel
+							value="#{mbAccueil.getEvenementByCategorieOrderedByParution(categorie)}"
+							var="evenement" itemStyle="text-align:center" responsive="true"
+							style="text-align:center;height:100%;">
+							<f:facet name="header">
+								<h:form>
+									<h:commandLink value="#{categorie.libelleCategorie}"
+										action="#{mbAccueil.redirectionCategorie(categorie)}" />
+								</h:form>
+							</f:facet>
+							<p:layout style="width:400px;height:400px;margin: auto;">
+								<p:layoutUnit position="center" size="100">
+									<h:form style="overflow:hidden;">
+										<h:commandLink
+											action="#{mbAccueil.redirectionFicheDescriptive(evenement)}">
+											<p:graphicImage class="afficheEvenement"
+												value="../images/#{evenement.affiche}"
+												alt="../images/affiche_default.png" />
+										</h:commandLink>
+									</h:form>
+								</p:layoutUnit>
+								<p:layoutUnit position="south" size="100">
+									<b><h:outputText value="#{evenement.libelleEvenement}" /></b>
+									<br />
+									<h:outputLabel value="A partir du: " />
+									<p:outputLabel value="#{mbAccueil.minDateEvenement(evenement)}">
+										<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+									</p:outputLabel>
+									<br />
+									<h:outputLabel value="A partir de: " />
+									<h:outputText value="#{mbAccueil.minPrixEvenement(evenement)} €"  />
+									<br />
+<!-- 								<h:outputText value="#{evenement.parution}" /> -->
+								</p:layoutUnit>
+							</p:layout>
+						</p:carousel>
+					</div>
+				</section>
+			</ui:repeat>
+
+		</div>
+
+	</ui:define>
+
+</ui:composition>
+</html>

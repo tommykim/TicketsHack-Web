@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	template="/templates/commons.xhtml">
+	<ui:define name="body">
+		<div id="content">
+			<div class="container">
+			<div class="row" id="quantityCategory">
+			<iframe src="http://localhost:5601/app/kibana#/visualize/edit/Quantit%C3%A9-vendue-par-categorie?embed&amp;_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-15m,mode:quick,to:now))&amp;_a=(filters:!(),linked:!f,query:(query_string:(analyze_wildcard:!t,query:'*')),uiState:(),vis:(aggs:!((id:'1',params:(field:quantity),schema:metric,type:sum),(id:'2',params:(field:category,order:desc,orderBy:'1',size:5),schema:segment,type:terms)),listeners:(),params:(addLegend:!t,addTooltip:!t,isDonut:!f,shareYAxis:!t),type:pie))" height="600" width="800"></iframe>
+			</div>
+			<div class="row" id="quantityTheme">
+			<iframe src="http://localhost:5601/app/kibana#/visualize/edit/Quantit%C3%A9-vendue-par-theme?embed&amp;_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-15m,mode:quick,to:now))&amp;_a=(filters:!(),linked:!f,query:(query_string:(analyze_wildcard:!t,query:'*')),uiState:(),vis:(aggs:!((id:'1',params:(field:quantity),schema:metric,type:sum),(id:'2',params:(field:theme,order:desc,orderBy:'1',size:5),schema:segment,type:terms)),listeners:(),params:(addLegend:!t,addTooltip:!t,isDonut:!t,shareYAxis:!t),type:pie))" height="600" width="800"></iframe>
+			</div>
+			<div class="row" id="quantityAnnee">
+			<iframe src="http://localhost:5601/app/kibana#/visualize/edit/Quantit%C3%A9-vendue-par-ann%C3%A9e?embed&amp;_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-15m,mode:quick,to:now))&amp;_a=(filters:!(),linked:!f,query:(query_string:(analyze_wildcard:!t,query:'*')),uiState:(),vis:(aggs:!((id:'1',params:(field:quantity),schema:metric,type:sum),(id:'2',params:(field:createYear,order:asc,orderBy:_term,size:5),schema:segment,type:terms)),listeners:(),params:(addLegend:!t,addTimeMarker:!f,addTooltip:!t,defaultYExtents:!f,drawLinesBetweenPoints:!t,interpolate:linear,radiusRatio:9,scale:linear,setYExtents:!f,shareYAxis:!t,showCircles:!t,smoothLines:!f,times:!(),yAxis:()),type:line))" height="600" width="800"></iframe>
+			</div>
+			<div class="row" id="quantityMois">
+			<iframe src="http://localhost:5601/app/kibana#/visualize/edit/Quantit%C3%A9-vendu-par-mois?embed&amp;_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-15m,mode:quick,to:now))&amp;_a=(filters:!(),linked:!f,query:(query_string:(analyze_wildcard:!t,query:'*')),uiState:(),vis:(aggs:!((id:'1',params:(field:quantity),schema:metric,type:sum),(id:'2',params:(field:createMonth,order:asc,orderBy:_term,size:12),schema:segment,type:terms)),listeners:(),params:(addLegend:!t,addTimeMarker:!f,addTooltip:!t,defaultYExtents:!f,mode:stacked,scale:linear,setYExtents:!f,shareYAxis:!t,times:!(),yAxis:()),type:histogram))" height="600" width="800"></iframe>
+			</div>
+			</div>
+			<!-- /.container -->
+		</div>
+		<!-- /#content -->
+
+
+
+
+	</ui:define>
+</ui:composition>

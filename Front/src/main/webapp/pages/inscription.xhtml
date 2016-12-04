@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templateHeaderFooter.xhtml">
+
+	<!-- INSERT HEAD -->
+	<ui:define name="insert-head">
+		<title>Inscription</title>
+		<link rel="stylesheet" href="../style/cssInscription.css" />
+	</ui:define>
+
+	<!-- INSERT BODY -->
+	<ui:define name="insert-body">
+
+		<!-- ==== TRUNK ==== -->
+		<div class="trunk">
+			<div class="headerInscription ui-grid-row">
+				<p:outputLabel rendered="#{mbConnexion.isConnected()==false}"><h1>Fiche d'inscription</h1></p:outputLabel>
+				<p:outputLabel rendered="#{mbConnexion.isConnected()!=false}"><h1>Modification du compte</h1></p:outputLabel>
+			</div>
+
+			<h:form id="formulaire">
+
+				<div class="ui-grid-row">
+					<div class=" ui-grid-col-6">
+						<h:panelGrid columns="2" cellpadding="5" class="formInscription">
+							<h:outputLabel value="Adresse mail: *" />
+							<p:inputText value="#{mbInscription.utilisateur.mail}"
+								required="true" />
+
+							<h:outputLabel value="Mot de passe: *" />
+							<p:password id="nonFeedback"
+								value="#{mbInscription.utilisateur.mdp}" required="true" />
+
+							<h:outputLabel value="Confirmation mot de passe: *" />
+							<p:password required="true" />
+
+						</h:panelGrid>
+					</div>
+
+					<div class="ui-grid-col-6" style="padding-bottom: 20px">
+						<h:panelGrid columns="2" style="margin-bottom:10px"
+							cellpadding="5">
+							<h:outputLabel value="Civilité: *" class="formInscription" />
+							<p:selectOneRadio value="#{mbInscription.idCivilite}"
+								required="false">
+								<f:selectItems value="#{mbInscription.civilites}" var="c"
+									itemLabel="#{c.libelleCivilite}" itemValue="#{c.idCivilite}" />
+							</p:selectOneRadio>
+						</h:panelGrid>
+
+						<h:panelGrid columns="2" cellpadding="5" class="formInscription">
+							<h:outputLabel value="Nom: *" />
+							<p:inputText value="#{mbInscription.utilisateur.nom}"
+								required="true" />
+							<h:outputLabel value="Prénom: *" />
+							<p:inputText value="#{mbInscription.utilisateur.prenom}"
+								required="true" />
+							<h:outputLabel value="Date de naissance: " />
+							<p:calendar value="#{mbInscription.utilisateur.naissance}"
+								locale="fr" navigator="true" required="false" yearRange="c-100:c" />
+							<h:outputLabel value="Numéro de mobile: " />
+							<p:inputMask value="#{mbInscription.utilisateur.mobile}"
+								mask="99 99 99 99 99" />
+						</h:panelGrid>
+					</div>
+				</div>
+				<script type="text/javascript">
+					PrimeFaces.locales['fr'] = {
+						closeText : 'Fermer',
+						prevText : 'Précédent',
+						nextText : 'Suivant',
+						monthNames : [ 'Janvier', 'Février', 'Mars', 'Avril',
+								'Mai', 'Juin', 'Juillet', 'Août', 'Septembre',
+								'Octobre', 'Novembre', 'Décembre' ],
+						monthNamesShort : [ 'Jan', 'Fév', 'Mar', 'Avr', 'Mai',
+								'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc' ],
+						dayNames : [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi',
+								'Jeudi', 'Vendredi', 'Samedi' ],
+						dayNamesShort : [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu',
+								'Ven', 'Sam' ],
+						dayNamesMin : [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+						weekHeader : 'Semaine',
+						firstDay : 1,
+						isRTL : false,
+						showMonthAfterYear : false,
+						yearSuffix : '',
+						timeOnlyTitle : 'Choisir l\'heure',
+						timeText : 'Heure',
+						hourText : 'Heures',
+						minuteText : 'Minutes',
+						secondText : 'Secondes',
+						currentText : 'Maintenant',
+						ampm : false,
+						month : 'Mois',
+						week : 'Semaine',
+						day : 'Jour',
+						allDayText : 'Toute la journée'
+					};
+				</script>
+				
+				<br />
+				<br />
+
+				<div class="ui-grid-row">
+					<h3>Séléctionnez les thèmes qui vous intéressent si vous
+						souhaitez recevoir les nouveautés par mail.</h3>
+					<br />
+				</div>
+
+				<div class="ui-grid-row themesSelection" style="height: auto;">
+
+					<ui:repeat var="c" value="#{mbInscription.categories}">
+						<div class=" ui-grid-col-2">
+							<h4>#{c.libelleCategorie}</h4>
+							<p:selectManyCheckbox id="basic"
+								 required="false"
+								layout="pageDirection" >
+								<f:selectItems value="#{mbInscription.themesParCategorie(c)}"
+									var="t" itemLabel="#{t.libelleTheme}" itemValue="#{t.idTheme}" />
+							</p:selectManyCheckbox>
+						</div>
+					</ui:repeat>
+				</div>
+
+				<div class="ui-grid-row">
+					<p:commandButton value="Inscription"
+						action="#{mbInscription.enregistrerUtilisateur()}"
+						actionListener="#{mbInscription.majMessage()}"
+						update="messageConf" class="boutonEspace" rendered="#{mbConnexion.isConnected()==false}">
+					</p:commandButton>
+					<p:commandButton value="Enregistrer les modifications"
+						action="#{mbInscription.MAJUtilisateur()}"
+						actionListener="#{mbInscription.majMessage()}"
+						update="messageConf" class="boutonEspace" rendered="#{mbConnexion.isConnected()!=false}">
+					</p:commandButton>
+					<h3><h:outputText value="#{mbInscription.message}" id="messageConf"
+						class="confirmation" /></h3>
+				</div>
+				
+			</h:form>
+
+<!-- 			<div class="ui-grid-row" -->
+<!-- 				style="padding-bottom: 20px; padding-left: 20px"> -->
+<!-- 				<h:form > -->
+<!-- 				    	<h:commandLink action="#{mbInscription.retourAccueil()}" -->
+<!-- 						value="Retour à l'accueil"/> -->
+<!-- 				</h:form> -->
+<!-- 			</div> -->
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

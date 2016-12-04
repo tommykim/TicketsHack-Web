@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	template="/templates/commons.xhtml" xmlns:p="http://primefaces.org/ui">
+	<ui:define name="body">
+		<div id="content">
+			<div class="container">
+
+				<div class="col-md-12">
+					<ul class="breadcrumb">
+						<li><a href="#">Accueil</a></li>
+						<li>Panier</li>
+					</ul>
+				</div>
+
+				<div class="col-md-12" id="basket">
+
+					<div class="box">
+						<hr />
+						<p class="lead">Commande en cours :</p>
+
+						<div class="table-responsive">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Article</th>
+										<th>Quantité</th>
+										<th>Tarif</th>
+										<th>Date événement</th>
+										<th>Lieu</th>
+										<th>Prix total</th>
+									</tr>
+								</thead>
+								<h:form id="formPanel">
+									<tbody>
+
+										<ui:repeat var="ligne"
+											value="#{MBpanier.getListeLigneCommande()}">
+											<tr>
+												<td>#{MBpanier.getEvenement(MBpanier.getOccurence(MBpanier.getTarif(ligne))).libelleEvenement}</td>
+												<td><input jsf:id="quantityProduct" type="number"
+													jsf:value="#{ligne.quantitie}" class="form-control">
+												<f:ajax event="change" update="formPanel" render="formPanel" />
+													</input></td>
+												<td><h:outputLabel
+														value="#{MBpanier.getTarif(ligne).libelleTarif} : #{MBpanier.getTarif(ligne).prix} €uros" />
+												</td>
+												<td><h:outputLabel
+														value="#{MBpanier.getOccurence(MBpanier.getTarif(ligne)).date}">
+														<f:convertDateTime type="date"
+															pattern="dd/MM/yyyy 'à' hh'h'mm" />
+													</h:outputLabel></td>
+												<td>#{MBpanier.getOccurence(MBpanier.getTarif(ligne)).lieu}</td>
+												<td>#{MBpanier.Total(MBpanier.getTarif(ligne).prix,ligne.quantitie)}€</td>
+												<td><h:commandLink action="#{MBpanier.Retirer(ligne)}">
+														<i class="fa fa-trash-o"></i>
+													</h:commandLink></td>
+											</tr>
+											<h:panelGroup rendered="#{MBpanier.afficherDispo(ligne.tarif.occurence.idOccurence,ligne.quantitie)}">
+												<tr>
+									<td style="color:red"><h:outputLabel value=" Quantite demandée indisponible. Il reste #{MBpanier.nbrPlaceReal} places" />
+												</td>
+												</tr>
+											</h:panelGroup>
+
+										</ui:repeat>
+									</tbody>
+									<tfoot>
+										<tr>
+											<th colspan="4"></th>
+											<th>Total</th>
+											<th><h:outputLabel id="Total"
+													value="#{MBpanier.Totaux()} €" /></th>
+										</tr>
+									</tfoot>
+								</h:form>
+							</table>
+
+						</div>
+						<!-- /.table-responsive -->
+
+						<div class="box-footer">
+							<div class="pull-left">
+								<a href="pages/index.jsf" class="btn btn-default"><i
+									class="fa fa-chevron-left"></i> Contiuer les achats</a>
+							</div>
+							<div class="pull-right">
+								<h:form>
+									<a jsf:action="panier" class="btn btn-default"> <i
+										class="fa fa-refresh"></i> Mise à jour du panier
+									</a>
+									<button type="submit" class="btn btn-primary"
+										jsf:action="#{MBpanier.validerPanier()}">
+										Valider et aller au paiement <i class="fa fa-chevron-right"></i>
+									</button>
+								</h:form>
+							</div>
+						</div>
+					</div>
+					<!-- /.box -->
+
+				</div>
+				<!-- /.col-md-12 -->
+
+			</div>
+			<!-- /.container -->
+		</div>
+		<!-- /#content -->
+	</ui:define>
+</ui:composition>
